@@ -197,7 +197,7 @@ namespace VNEngine
 
 
         public void Lighten()
-        {
+        {            
             if (this.GetComponent<Image>().color != Color.white)
             {
                 StopAllCoroutines();

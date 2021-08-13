@@ -192,10 +192,10 @@ public class UIEvents : MonoBehaviour
 		StartCoroutine (SceneLoader.LoadSceneAsync ("HowToPlay"));
 	}
 
-	public void LoadMissionsScene ()
+	public void LoadMissionsScene (string sceneName)
 	{
 		AudioClips.instance.PlayButtonClickSFX ();
-		StartCoroutine (SceneLoader.LoadSceneAsync ("Missions"));
+		StartCoroutine (SceneLoader.LoadSceneAsync (sceneName));
 	}
 
 	public void LoadOptionsScene ()
