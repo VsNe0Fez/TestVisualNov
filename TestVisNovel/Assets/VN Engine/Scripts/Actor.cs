@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using Spine.Unity;
+using System;
 
 namespace VNEngine
 {
@@ -28,14 +30,14 @@ namespace VNEngine
         [HideInInspector]
         public bool is_moving = false;
 
-        private Sprite default_image;    // Image the prefab is saved with
+        private SkeletonGraphic default_image;    // Image the prefab is saved with
 
 
         void Awake()
         {
             rect = GetComponent<RectTransform>();
             cur_image = this.GetComponent<Image>();
-            default_image = cur_image.sprite;
+          //  default_image = cur_image.sprite;
             original_scale = rect.localScale;
 
             if (this.transform.childCount > 0)
@@ -63,8 +65,8 @@ namespace VNEngine
         {
             remove_when_out_of_sight = false;
             GetComponent<Image>().color = Color.white;
-            GetComponent<Image>().sprite = default_image;
-            GetComponent<Image>().overrideSprite = default_image;
+          //  GetComponent<Image>().sprite = default_image;
+          //  GetComponent<Image>().overrideSprite = default_image;
             transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x),
                                                 Mathf.Abs(transform.localScale.y),
                                                 Mathf.Abs(transform.localScale.z));
@@ -198,7 +200,8 @@ namespace VNEngine
 
         public void Lighten()
         {            
-            if (this.GetComponent<Image>().color != Color.white)
+
+            if (this.GetComponent<Image>().color != Color.white || this.GetComponent<SkeletonGraphic>().color != Color.white)
             {
                 StopAllCoroutines();
                 StartCoroutine(Lighten_Coroutine());
@@ -207,10 +210,18 @@ namespace VNEngine
         IEnumerator Lighten_Coroutine()
         {
             float value = 0;
-            while (this.GetComponent<Image>().color != Color.white)
+            while (this.GetComponent<Image>().color != Color.white || this.GetComponent<SkeletonGraphic>().color!=Color.white)
             {
                 value += brigthness_change;
+                try{
                 this.GetComponent<Image>().color = Color.Lerp(Color.gray, Color.white, value);
+
+                }
+                catch(NullReferenceException ex)
+                {
+                    Debug.Log(ex.Message);
+                }
+                this.GetComponent<SkeletonGraphic>().color = Color.Lerp(Color.gray, Color.white, value);
                 yield return new WaitForSeconds(0.03f);
             }
             yield break;
